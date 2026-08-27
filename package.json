@@ -1,0 +1,10 @@
+{
+  "name": "cloud-serverless-checkpoint2",
+  "version": "1.0.0",
+  "description": "Funcao serverless acionada por eventos de um topico",
+  "main": "index.js",
+  "scripts": {
+    "start": "node local.js"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,9 @@
+node_modules/
+*.zip
+.env
+
+# credenciais e chaves de servico nunca entram no repositorio
+credentials.json
+*-key.json
+service-account*.json
+*url*.txt
