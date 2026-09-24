@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# id-token: write e exigido para a autenticacao via OIDC (sem chaves salvas).
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  lint-test-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint (verificacao de sintaxe)
+        run: node --check index.js
+
+      - name: Testes (evento simulado, sem credenciais de nuvem)
+        run: node local.js
+
+      # Autentica via OIDC: o GitHub assina um token de identidade, a AWS
+      # confere que ele veio deste repositorio e branch (definido na trust
+      # policy da role) e devolve credenciais temporarias. Nenhuma chave de
+      # acesso fica guardada em nenhum lugar.
+      - name: Configurar credenciais AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::209308108483:role/github-actions-checkpoint2-deploy
+          aws-region: eu-central-1
+
+      - name: Build (empacotar a funcao)
+        run: zip -j build.zip index.js
+
+      - name: Deploy (atualizar o codigo na AWS)
+        run: aws lambda update-function-code --function-name puc-checkpoint2-orders --zip-file fileb://build.zip --output text
+
+      - name: Verificar deploy
+        run: |
+          aws lambda wait function-updated-v2 --function-name puc-checkpoint2-orders
+          echo "puc-checkpoint2-orders atualizada com sucesso"
