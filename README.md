@@ -88,6 +88,9 @@ diretamente, sem nenhuma chave de acesso guardada como secret. A role so
 pode ser assumida por execucoes vindas deste repositorio, na branch `main`,
 e so tem permissao para atualizar o codigo desta funcao especifica.
 
+Execucao registrada com sucesso:
+[github.com/kauasrcs/cloud-serverless-checkpoint2/actions/runs/35943835915](https://github.com/kauasrcs/cloud-serverless-checkpoint2/actions/runs/35943835915)
+
 ## Arquivos
 
 * `index.js` - a funcao (o mesmo codigo que roda na nuvem)
